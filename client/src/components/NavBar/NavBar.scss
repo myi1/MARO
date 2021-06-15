@@ -1,0 +1,41 @@
+@use "../../styles/partials/variables" as *;
+
+.nav {
+  height: 80px;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $col-primary-background;
+  padding: $to-rem-24px 0;
+  z-index: 1;
+  &__logo {
+    height: 100px;
+    margin-left: $to-rem-16px;
+  }
+
+  &__link-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-right: $to-rem-16px;
+  }
+
+  &__link {
+    color: $col-mg-primary;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0 $to-rem-24px;
+
+    font-size: 26px;
+    &:hover {
+      color: white;
+    }
+    &--active {
+      color: white;
+    }
+  }
+}
