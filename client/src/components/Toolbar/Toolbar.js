@@ -35,7 +35,7 @@ function Toolbar({ roverClickHandle, min, max, dateClickHandle }) {
         Spirit
       </label>
       <input
-        on={dateClickHandle}
+        onChange={dateClickHandle}
         type='date'
         id='date'
         name='date'

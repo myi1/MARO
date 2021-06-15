@@ -11,6 +11,7 @@ export default class Gallery extends Component {
       name: "curiosity",
       landing_date: "",
       max_date: "",
+      selected_date: "2021-06-14",
     },
     shouldUpdate: false,
   };
@@ -28,17 +29,20 @@ export default class Gallery extends Component {
 
   getCurrentImages() {
     const { currentRover } = this.state;
-    const { name } = currentRover;
+    const { name, selected_date } = currentRover;
+    const today = new Date();
+    const date = selected_date || today.toLocaleDateString("en-CA");
     axios
       .get(
-        `${API_URL}rovers/${currentRover.name}/photos?camera=FHAZ&earth_date=2017-9-2&api_key=${API_KEY}`
+        `${API_URL}rovers/${currentRover.name}/photos?camera=FHAZ&earth_date=${date}&api_key=${API_KEY}`
       )
       .then((response) => {
+        console.log(this.state);
         this.setState({
           currentImages: response.data.photos,
           shouldUpdate: false,
         });
-        console.log("current state on click: ", name);
+        // console.log("current state on click: ", name);
       })
       .catch((err) => {
         console.log("API Request Failed: ", err);
@@ -52,7 +56,7 @@ export default class Gallery extends Component {
       .get(`${API_URL}manifests/${rover}?api_key=${API_KEY}`)
 
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         this.setState((prevState) => ({
           currentRover: {
             ...prevState.currentRover,
@@ -60,7 +64,7 @@ export default class Gallery extends Component {
             max_date: response.data.photo_manifest.max_date,
           },
         }));
-        console.log(this.state);
+        // console.log(this.state);
       });
   }
 
@@ -78,7 +82,14 @@ export default class Gallery extends Component {
   }
 
   dateClickHandle(e) {
-    console.log(e);
+    console.log(e.target.value);
+    this.setState((prevState) => ({
+      shouldUpdate: true,
+      currentRover: {
+        ...prevState.currentRover,
+        selected_date: e.target.value,
+      },
+    }));
   }
   render() {
     const { currentImages, currentRover } = this.state;
@@ -96,6 +107,7 @@ export default class Gallery extends Component {
           {
             <Toolbar
               roverClickHandle={(e) => this.roverClickHandle(e)}
+              dateClickHandle={(e) => this.dateClickHandle(e)}
               min={landing_date}
               max={max_date}
             />
