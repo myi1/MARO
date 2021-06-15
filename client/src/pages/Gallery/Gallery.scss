@@ -1,0 +1,28 @@
+@use '../../styles/partials/fonts' as *;
+@use '../../styles/partials/variables' as *;
+@use '../../styles/partials/mixins' as *;
+
+.gallery-page {
+  position: relative;
+  top: 120px;
+  padding: $to-rem-16px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.tool-bar {
+  width: 25%;
+  height: 100vh;
+  border: 2px solid black;
+}
+
+.gallery {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  &__image {
+    width: auto;
+    height: 20rem;
+    margin: 0 $to-rem-8px $to-rem-16px;
+  }
+}

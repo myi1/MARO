@@ -12,7 +12,7 @@ function NavBar() {
       <div className='nav__link-container'>
         <NavLink
           className='nav__link'
-          to='/images'
+          to='/gallery'
           activeClassName='nav__link--active'>
           Gallery
         </NavLink>

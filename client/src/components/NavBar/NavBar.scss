@@ -1,7 +1,9 @@
-@use "../../styles/partials/variables" as *;
+@use '../../styles/partials/fonts' as *;
+@use '../../styles/partials/variables' as *;
+@use '../../styles/partials/mixins' as *;
 
 .nav {
-  height: 80px;
+  height: 120px;
   width: 100vw;
   position: fixed;
   top: 0;
@@ -27,7 +29,6 @@
     color: $col-mg-primary;
     text-decoration: none;
     font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
     margin: 0 $to-rem-24px;
 
     font-size: 26px;

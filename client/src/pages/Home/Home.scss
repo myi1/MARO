@@ -1,6 +1,42 @@
+@use "../../styles/partials/variables.scss" as *;
+
 .hero {
   position: absolute;
-  //   top: 125px;
+  //   top: 80px;
   overflow: hidden;
   z-index: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  &__text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    z-index: 1;
+    top: 480px;
+    // background-color: gray;
+    // opacity: 70%;
+    padding: 1.5rem;
+  }
+  &__header {
+    font-size: 6rem;
+    color: rgb(255, 255, 255);
+    margin-bottom: 2rem;
+  }
+  &__text {
+    background-color: white;
+    padding: 1rem;
+    font-size: 2rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: black;
+    box-shadow: 10px 10px 26px 0px rgba(0, 0, 0, 0.75);
+
+    &:hover {
+      background-color: $col-mg-primary;
+      color: white;
+    }
+  }
 }
