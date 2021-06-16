@@ -1,6 +1,13 @@
 import React from "react";
 
-function Toolbar({ roverClickHandle, min, max, dateClickHandle }) {
+function Toolbar({
+  roverClickHandle,
+  min,
+  max,
+  dateClickHandle,
+  cameras,
+  cameraClickHandle,
+}) {
   return (
     <form className='toolbar'>
       <input
@@ -43,6 +50,18 @@ function Toolbar({ roverClickHandle, min, max, dateClickHandle }) {
         max={max}
         defaultValue={max}
       />
+      {cameras.map((camera) => (
+        <label htmlFor='spirit' className='toolbar__radio-button'>
+          <input
+            onClick={cameraClickHandle}
+            type='radio'
+            id={camera}
+            name='camera'
+            value={camera}
+          />
+          {camera}
+        </label>
+      ))}
     </form>
   );
 }
