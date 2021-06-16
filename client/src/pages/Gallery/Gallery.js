@@ -35,7 +35,7 @@ export default class Gallery extends Component {
     const { currentRover } = this.state;
     const { name, selected_date, selectedCamera } = currentRover;
     const today = new Date();
-    const date = selected_date || today.toLocaleDateString("en-CA");
+    const date = selected_date;
     axios
       .get(
         `${API_URL}rovers/${name}/photos?camera=${selectedCamera}&earth_date=${date}&api_key=${API_KEY}`
@@ -107,19 +107,34 @@ export default class Gallery extends Component {
     const date = e.target.value;
     // this.getCameras();
     const availableCameras = this.state.currentRover.camerasData;
+    const defaultCameras = [];
+    let cameras;
+
     const foundCameras = availableCameras.find(
       (obj) => obj.earth_date === date
     );
-    const cameras = foundCameras.cameras;
+    if (!foundCameras) {
+      cameras = defaultCameras;
+      this.setState((prevState) => ({
+        shouldUpdate: true,
+        currentRover: {
+          ...prevState.currentRover,
+          selected_date: e.target.value,
+          cameras,
+        },
+      }));
+    } else {
+      cameras = foundCameras.cameras;
+      this.setState((prevState) => ({
+        shouldUpdate: true,
+        currentRover: {
+          ...prevState.currentRover,
+          selected_date: e.target.value,
+          cameras,
+        },
+      }));
+    }
 
-    this.setState((prevState) => ({
-      shouldUpdate: true,
-      currentRover: {
-        ...prevState.currentRover,
-        selected_date: e.target.value,
-        cameras,
-      },
-    }));
     // console.log(this.state.currentRover.cameras);
   }
 
@@ -142,6 +157,16 @@ export default class Gallery extends Component {
         <section className='gallery'>
           <p>Loading....</p>
         </section>
+      );
+    }
+    if (!cameras) {
+      return (
+        <div className='gallery'>
+          <p>
+            There are no images for the selected paramters. Please change your
+            selections.
+          </p>
+        </div>
       );
     }
     return (
