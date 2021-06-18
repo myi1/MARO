@@ -1,0 +1,107 @@
+@use '../../styles/partials/fonts' as *;
+@use '../../styles/partials/variables' as *;
+@use '../../styles/partials/mixins' as *;
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+  box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+  //   border-radius: 5px;
+  background-color: $col-primary-background;
+  margin-bottom: 1rem;
+  &__button {
+    display: inline-block;
+    padding: 0.3em 1.2em;
+    margin: 0 0.3em 0.3em 0;
+    border-radius: 2em;
+    box-sizing: border-box;
+    text-decoration: none;
+
+    font-weight: 300;
+    color: #000000;
+    background-color: #fff;
+    text-align: center;
+    transition: all 0.2s;
+    &:hover,
+    &--active {
+      background-color: $col-mg-primary;
+      color: #fff;
+    }
+  }
+}
+
+.wrapper {
+  display: flex;
+
+  // background: #fff;
+  height: 100px;
+  width: 400px;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 5px;
+  padding: 20px 15px;
+}
+.wrapper .option {
+  background: #fff;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 0 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 0 10px;
+  border: 2px solid lightgrey;
+  transition: all 0.3s ease;
+}
+.wrapper .option .dot {
+  height: 20px;
+  width: 20px;
+  background: #d9d9d9;
+  border-radius: 50%;
+  position: relative;
+}
+.wrapper .option .dot::before {
+  position: absolute;
+  content: "";
+  top: 4px;
+  left: 4px;
+  width: 12px;
+  height: 12px;
+  background: $col-mg-primary;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(1.5);
+  transition: all 0.3s ease;
+}
+input[type="radio"] {
+  display: none;
+}
+#rover-option-1:checked:checked ~ .option-1,
+#rover-option-2:checked:checked ~ .option-2,
+#rover-option-3:checked:checked ~ .option-3 {
+  border-color: $col-mg-primary;
+  background: $col-mg-primary;
+}
+#rover-option-1:checked:checked ~ .option-1 .dot,
+#rover-option-2:checked:checked ~ .option-2 .dot,
+#rover-option-3:checked:checked ~ .option-3 .dot {
+  background: #fff;
+}
+#rover-option-1:checked:checked ~ .option-1 .dot::before,
+#rover-option-2:checked:checked ~ .option-2 .dot::before,
+#rover-option-3:checked:checked ~ .option-3 .dot::before {
+  opacity: 1;
+  transform: scale(1);
+}
+.wrapper .option span {
+  font-size: 20px;
+  color: $col-primary-background;
+  margin-left: 0.5rem;
+}
+#rover-option-1:checked:checked ~ .option-1 span,
+#rover-option-2:checked:checked ~ .option-2 span,
+#rover-option-3:checked:checked ~ .option-3 span {
+  color: #fff;
+}

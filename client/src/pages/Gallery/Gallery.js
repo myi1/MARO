@@ -34,7 +34,6 @@ export default class Gallery extends Component {
   getCurrentImages() {
     const { currentRover } = this.state;
     const { name, selected_date, selectedCamera } = currentRover;
-    const today = new Date();
     const date = selected_date;
     axios
       .get(
@@ -54,7 +53,6 @@ export default class Gallery extends Component {
   }
 
   getRoverManifest(target) {
-    const { currentRover } = this.state;
     const rover = target || "curiosity";
     axios
       .get(`${API_URL}manifests/${rover}?api_key=${API_KEY}`)
@@ -68,7 +66,6 @@ export default class Gallery extends Component {
             camerasData: response.data.photo_manifest.photos,
           },
         }));
-        console.log(this.state);
       });
   }
 
@@ -91,7 +88,6 @@ export default class Gallery extends Component {
   //   }
 
   roverClickHandle(e) {
-    const { currentRover } = this.state;
     console.log("clicked radio button", e.target.value);
     this.getRoverManifest(e.target.value);
     this.setState((prevState) => ({
@@ -139,7 +135,8 @@ export default class Gallery extends Component {
   }
 
   cameraClickHandle(e) {
-    const camera = e.target.value;
+    const camera = e.target.innerText;
+    console.log(e.target.innerText);
     this.setState((prevState) => ({
       shouldUpdate: true,
       currentRover: {
@@ -151,7 +148,7 @@ export default class Gallery extends Component {
 
   render() {
     const { currentImages, currentRover } = this.state;
-    const { name, landing_date, max_date, cameras } = currentRover;
+    const { landing_date, max_date, cameras } = currentRover;
     if (!currentImages) {
       return (
         <section className='gallery'>
