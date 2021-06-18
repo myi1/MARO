@@ -30,3 +30,8 @@ video {
   font-family: "CarroisGothic", sans-serif;
   box-sizing: border-box;
 }
+
+body,
+html {
+  background-color: $col-primary-background;
+}

@@ -3,20 +3,38 @@ import React, { Component } from "react";
 import "./Gallery.scss";
 import { API_URL, API_KEY } from "../../util";
 import Toolbar from "../../components/Toolbar/Toolbar";
+import ImageGallery from "react-image-gallery";
+import HeartIcon from "../../assets/icons/Icon-likes.svg";
+const images = [
+  {
+    original: "https://picsum.photos/id/1018/1000/600/",
+    thumbnail: "https://picsum.photos/id/1018/250/150/",
+  },
+  {
+    original: "https://picsum.photos/id/1015/1000/600/",
+    thumbnail: "https://picsum.photos/id/1015/250/150/",
+  },
+  {
+    original: "https://picsum.photos/id/1019/1000/600/",
+    thumbnail: "https://picsum.photos/id/1019/250/150/",
+  },
+];
 
-export default class Gallery extends Component {
+export default class MarsGallery extends Component {
   state = {
     currentImages: [],
+    galleryImagesArray: [],
     currentRover: {
       name: "curiosity",
       landing_date: "",
       max_date: "",
       selected_date: "2021-06-14",
       camerasData: [],
-      cameras: [],
+      cameras: ["FHAZ", "MAST", "NAVCAM", "RHAZ"],
       selectedCamera: "FHAZ",
     },
     shouldUpdate: false,
+    showGallery: false,
   };
 
   componentDidMount() {
@@ -40,12 +58,20 @@ export default class Gallery extends Component {
         `${API_URL}rovers/${name}/photos?camera=${selectedCamera}&earth_date=${date}&api_key=${API_KEY}`
       )
       .then((response) => {
+        const { photos } = response.data;
+        // const currentImages = response.data.photos;
+        const currentImages = photos.map((photo) => ({
+          original: photo.img_src,
+          thumbnail: photo.img_src,
+        }));
+
         // console.log(this.state);
         this.setState({
           currentImages: response.data.photos,
           shouldUpdate: false,
+          galleryImagesArray: currentImages,
         });
-        // console.log("current state on click: ", name);
+        console.log(currentImages);
       })
       .catch((err) => {
         console.log("API Request Failed: ", err);
@@ -57,35 +83,19 @@ export default class Gallery extends Component {
     axios
       .get(`${API_URL}manifests/${rover}?api_key=${API_KEY}`)
       .then((response) => {
-        // console.log(response);
+        console.log(response.data);
         this.setState((prevState) => ({
+          shouldUpdate: true,
           currentRover: {
             ...prevState.currentRover,
             landing_date: response.data.photo_manifest.landing_date,
             max_date: response.data.photo_manifest.max_date,
             camerasData: response.data.photo_manifest.photos,
+            selected_date: response.data.photo_manifest.max_date,
           },
         }));
       });
   }
-
-  //   getCameras() {
-  //     const { currentRover } = this.state;
-  //     const rover = currentRover.name || "curiosity";
-  //     // let camerasData;
-  //     axios
-  //       .get(`${API_URL}manifests/${rover}?api_key=${API_KEY}`)
-  //       .then((response) => {
-  //         this.setState({
-  //           ...this.state,
-  //           camerasData: response.data.photo_manifest.photos,
-  //         });
-  //         // console.log(this.state.camerasData);
-  //       })
-  //       .catch((err) => {
-  //         console.log("API Request Failed: ", err);
-  //       });
-  //   }
 
   roverClickHandle(e) {
     console.log("clicked radio button", e.target.value);
@@ -95,13 +105,14 @@ export default class Gallery extends Component {
       currentRover: {
         ...prevState.currentRover,
         name: e.target.value,
+        cameras: [],
       },
     }));
   }
 
   dateClickHandle(e) {
+    e.preventDefault();
     const date = e.target.value;
-    // this.getCameras();
     const availableCameras = this.state.currentRover.camerasData;
     const defaultCameras = [];
     let cameras;
@@ -136,19 +147,25 @@ export default class Gallery extends Component {
 
   cameraClickHandle(e) {
     const camera = e.target.innerText;
-    console.log(e.target.innerText);
+    console.log(e.target.name);
     this.setState((prevState) => ({
       shouldUpdate: true,
       currentRover: {
         ...prevState.currentRover,
         selectedCamera: camera,
       },
+      activeName: camera,
     }));
   }
 
+  handleLikeClick(e) {
+    console.log(e.target.previousElementSibling.currentSrc);
+  }
+
   render() {
-    const { currentImages, currentRover } = this.state;
-    const { landing_date, max_date, cameras } = currentRover;
+    let galleryView;
+    const { currentImages, currentRover, showGallery } = this.state;
+    const { landing_date, max_date, cameras, selectedCamera } = currentRover;
     if (!currentImages) {
       return (
         <section className='gallery'>
@@ -166,6 +183,39 @@ export default class Gallery extends Component {
         </div>
       );
     }
+    if (showGallery) {
+      galleryView = (
+        <div className='gallery'>
+          <ImageGallery
+            items={this.state.galleryImagesArray}
+            showBullets='true'
+          />
+        </div>
+      );
+    } else {
+      galleryView = (
+        <div className='gallery'>
+          {currentImages.map((image) => {
+            return (
+              <div className='gallery__image-container' key={image.id}>
+                <img
+                  className='gallery__image'
+                  src={image.img_src}
+                  alt={image.earth_date}
+                />
+                <img
+                  src={HeartIcon}
+                  className='gallery__like-icon'
+                  onClick={(e) => this.handleLikeClick(e)}
+                  alt='like'
+                />
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
     return (
       <section className='gallery-page'>
         <div className='tool-bar'>
@@ -177,21 +227,11 @@ export default class Gallery extends Component {
               min={landing_date}
               max={max_date}
               cameras={cameras}
+              selectedCamera={selectedCamera}
             />
           }
         </div>
-        <div className='gallery'>
-          {currentImages.map((image) => {
-            return (
-              <img
-                className='gallery__image'
-                src={image.img_src}
-                alt={image.earth_date}
-                key={image.id}
-              />
-            );
-          })}
-        </div>
+        {galleryView}
       </section>
     );
   }

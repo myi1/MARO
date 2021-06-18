@@ -2,7 +2,7 @@ import "./App.scss";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import NavBar from "./components/NavBar/NavBar";
-import Gallery from "./pages/Gallery/Gallery";
+import MarsGallery from "./pages/Gallery/Gallery";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <NavBar />
         <Switch>
           <Route exact path='/' component={Home}></Route>
-          <Route path='/gallery' component={Gallery}></Route>
+          <Route path='/gallery' component={MarsGallery}></Route>
         </Switch>
       </Router>
     </div>

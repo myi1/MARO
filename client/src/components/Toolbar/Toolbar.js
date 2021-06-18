@@ -9,9 +9,11 @@ function Toolbar({
   dateClickHandle,
   cameras,
   cameraClickHandle,
+  activeName,
+  selectedCamera,
 }) {
   return (
-    <form className='toolbar'>
+    <div className='toolbar'>
       <div className='wrapper'>
         <input
           onClick={roverClickHandle}
@@ -24,7 +26,7 @@ function Toolbar({
           id='rover-option-1'
         />
         <label htmlFor='rover-option-1' className='option option-1'>
-          <div class='dot'></div>
+          <div className='dot'></div>
           <span>Curiosity</span>
         </label>
         <input
@@ -37,7 +39,7 @@ function Toolbar({
           className='toolbar__input toolbar__input--2'
         />
         <label htmlFor='rover-option-2' className='option option-2'>
-          <div class='dot'></div>
+          <div className='dot'></div>
           <span>Opportunity</span>
         </label>
         <input
@@ -51,7 +53,7 @@ function Toolbar({
           id='rover-option-3'
         />
         <label htmlFor='rover-option-3' className='option option-3'>
-          <div class='dot'></div>
+          <div className='dot'></div>
           <span>Spirit</span>
         </label>
       </div>
@@ -63,25 +65,20 @@ function Toolbar({
         min={min}
         max={max}
         defaultValue={max}
+        className='toolbar__date'
       />
-      {/* {cameras.map((camera) => (
-        <label htmlFor='spirit' className='toolbar__radio-button'>
-          <input
-            onClick={cameraClickHandle}
-            type='radio'
-            id={camera}
-            name='camera'
-            value={camera}
-            key={camera}
-            className='toolbar__input'
+
+      <div className='toolbar__button-container'>
+        {cameras.map((camera) => (
+          <CameraButton
+            cameraClickHandle={cameraClickHandle}
+            name={camera}
+            camera={camera}
+            selectedCamera={selectedCamera}
           />
-          {camera}
-        </label>
-      ))} */}
-      {cameras.map((camera) => (
-        <CameraButton cameraClickHandle={cameraClickHandle} camera={camera} />
-      ))}
-    </form>
+        ))}
+      </div>
+    </div>
   );
 }
 

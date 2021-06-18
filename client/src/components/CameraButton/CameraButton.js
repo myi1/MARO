@@ -1,16 +1,21 @@
 import React from "react";
 
-function CameraButton({ cameraClickHandle, camera }) {
+function CameraButton({ cameraClickHandle, camera, selectedCamera }) {
+  let buttonClass;
+  if (selectedCamera === camera) {
+    buttonClass = "toolbar__button toolbar__button--active";
+  } else {
+    buttonClass = "toolbar__button";
+  }
   return (
-    <div className='toolbar__button-container'>
-      <button
-        type='button'
-        value='button'
-        className='toolbar__button'
-        onClick={cameraClickHandle}>
-        {camera}
-      </button>
-    </div>
+    <button
+      type='button'
+      value='button'
+      id={camera}
+      className={buttonClass}
+      onClick={cameraClickHandle}>
+      {camera}
+    </button>
   );
 }
 

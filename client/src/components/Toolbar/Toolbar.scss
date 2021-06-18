@@ -4,15 +4,24 @@
 
 .toolbar {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
   //   border-radius: 5px;
   background-color: $col-primary-background;
   margin-bottom: 1rem;
+  padding: 0 $to-rem-16px;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  &__button-container {
+    display: flex;
+    align-items: center;
+    margin-left: 2rem;
+  }
   &__button {
     display: inline-block;
-    padding: 0.3em 1.2em;
-    margin: 0 0.3em 0.3em 0;
+    padding: 1.3em 2.2em;
+    font-size: 0.8375rem;
+    margin: 0 1rem 0 0;
     border-radius: 2em;
     box-sizing: border-box;
     text-decoration: none;
@@ -28,6 +37,15 @@
       color: #fff;
     }
   }
+  input[type="date"] {
+    // border: 2px solid black;
+    height: 60px;
+    margin: auto 1rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    padding-left: 0.2rem;
+    // background-color: $col-mg-primary;
+  }
 }
 
 .wrapper {
@@ -35,7 +53,7 @@
 
   // background: #fff;
   height: 100px;
-  width: 400px;
+  //   width: 400px;
   align-items: center;
   justify-content: space-evenly;
   border-radius: 5px;
