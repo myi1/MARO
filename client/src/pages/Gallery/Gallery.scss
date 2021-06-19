@@ -25,4 +25,37 @@
     margin: 0 $to-rem-8px $to-rem-16px;
     border: 1px solid gray;
   }
+  &__like-icon {
+    cursor: pointer;
+    position: relative;
+    top: -25px;
+    left: -35px;
+    &--liked,
+    :hover {
+      color: red;
+    }
+  }
+  &__confirmation {
+    color: white;
+    background-color: $col-mg-primary;
+    border: 1px solid black;
+    font-size: 3rem;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    animation: fade 0.75s linear 0s 1;
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

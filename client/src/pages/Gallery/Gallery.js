@@ -1,24 +1,10 @@
 import axios from "axios";
 import React, { Component } from "react";
 import "./Gallery.scss";
-import { API_URL, API_KEY } from "../../util";
+import { API_URL, API_KEY, MY_API_URL } from "../../util";
 import Toolbar from "../../components/Toolbar/Toolbar";
 import ImageGallery from "react-image-gallery";
 import HeartIcon from "../../assets/icons/Icon-likes.svg";
-const images = [
-  {
-    original: "https://picsum.photos/id/1018/1000/600/",
-    thumbnail: "https://picsum.photos/id/1018/250/150/",
-  },
-  {
-    original: "https://picsum.photos/id/1015/1000/600/",
-    thumbnail: "https://picsum.photos/id/1015/250/150/",
-  },
-  {
-    original: "https://picsum.photos/id/1019/1000/600/",
-    thumbnail: "https://picsum.photos/id/1019/250/150/",
-  },
-];
 
 export default class MarsGallery extends Component {
   state = {
@@ -35,6 +21,7 @@ export default class MarsGallery extends Component {
     },
     shouldUpdate: false,
     showGallery: false,
+    addtoFavorites: false,
   };
 
   componentDidMount() {
@@ -158,14 +145,40 @@ export default class MarsGallery extends Component {
     }));
   }
 
+  // function toggleClassLikeIcon() {
+  //   this.toggleClass('')
+  // }
+
   handleLikeClick(e) {
+    const url = e.target.previousElementSibling.currentSrc;
     console.log(e.target.previousElementSibling.currentSrc);
+    axios
+      .post(`${MY_API_URL}images/`, {
+        original: url,
+        thumbnail: url,
+      })
+      .then((response) => {
+        this.setState({
+          ...this.state,
+          addtoFavorites: true,
+        });
+        setTimeout(
+          () => this.setState({ ...this.state, addtoFavorites: false }),
+          750
+        );
+      });
   }
 
   render() {
     let galleryView;
+
     const { currentImages, currentRover, showGallery } = this.state;
-    const { landing_date, max_date, cameras, selectedCamera } = currentRover;
+    const { landing_date, max_date, cameras, selectedCamera, addtoFavorites } =
+      currentRover;
+    // console.log(confirmFavorites);
+
+    let confirmFavorites = <p className='gallery__confirmation'>Added!</p>;
+
     if (!currentImages) {
       return (
         <section className='gallery'>
@@ -231,6 +244,7 @@ export default class MarsGallery extends Component {
             />
           }
         </div>
+        {this.state.addtoFavorites ? confirmFavorites : null}
         {galleryView}
       </section>
     );
