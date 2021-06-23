@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { Component } from "react";
 import "./Gallery.scss";
-import { API_URL, API_KEY, MY_API_URL } from "../../util";
+import { API_URL, API_KEY, MY_API_URL, cameraNames } from "../../util";
 import Toolbar from "../../components/Toolbar/Toolbar";
 import ImageGallery from "react-image-gallery";
 import HeartIcon from "../../assets/icons/Icon-likes.svg";
@@ -92,6 +92,8 @@ export default class MarsGallery extends Component {
         ...prevState.currentRover,
         name: e.target.value,
         cameras: [],
+        selectedCamera: "",
+        selected_date: ""
       },
     }));
   }
@@ -114,18 +116,32 @@ export default class MarsGallery extends Component {
           ...prevState.currentRover,
           selected_date: e.target.value,
           cameras,
+          
         },
       }));
     } else {
       cameras = foundCameras.cameras;
-      this.setState((prevState) => ({
-        shouldUpdate: true,
-        currentRover: {
-          ...prevState.currentRover,
-          selected_date: e.target.value,
-          cameras,
-        },
-      }));
+      if(cameras.includes(this.state.currentRover.selectedCamera)) {
+        this.setState((prevState) => ({
+          shouldUpdate: true,
+          currentRover: {
+            ...prevState.currentRover,
+            selected_date: e.target.value,
+            cameras,
+          },
+        }));
+      } else {
+        this.setState((prevState) => ({
+          shouldUpdate: true,
+          currentRover: {
+            ...prevState.currentRover,
+            selected_date: e.target.value,
+            cameras,
+            selectedCamera: ""
+          },
+        }));
+      }
+      
     }
 
     // console.log(this.state.currentRover.cameras);
@@ -168,6 +184,15 @@ export default class MarsGallery extends Component {
       }).catch((err) => {
         console.log(err);
       });
+  }
+
+  findCameraName(input) {
+    if(input) {
+      const foundCamera = cameraNames.find((camera) => camera.shortName === input);
+      const foundFullName = foundCamera.fullName;
+      return foundFullName;
+
+    }
   }
 
   render() {
@@ -255,7 +280,7 @@ export default class MarsGallery extends Component {
         <h2 className="info__title">Date:</h2>
         <p className="info__content">{currentRover.selected_date}</p>
         <h2 className="info__title">Camera:</h2>
-        <p className="info__content">{currentRover.selectedCamera}</p>
+        <p className="info__content">{this.findCameraName(currentRover.selectedCamera)}</p>
       </div>
         </div>
         {galleryView}
