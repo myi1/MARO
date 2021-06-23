@@ -64,7 +64,7 @@ function Toolbar({
         name='date'
         min={min}
         max={max}
-        defaultValue={max}
+        // defaultValue={max}
         className='toolbar__date'
       />
 
