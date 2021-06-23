@@ -8,22 +8,44 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  // opacity: 70%;
+  // z-index: 1;
+  // background-color: rgba(0, 0, 0, 0.75);
+  &__overlay {
+    background: rgba(32, 32, 32, 30%);
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
   &__text-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     top: 480px;
-    // background-color: gray;
-    // opacity: 70%;
-    padding: 1.5rem;
+    // width: 100%;
+
+    // background: rgba(32, 32, 32, 50%);
+    // padding: 1.5rem 0;
   }
   &__header {
     font-size: 6rem;
     color: rgb(255, 255, 255);
     margin-bottom: 2rem;
+  }
+  &__span {
+    color: $col-mg-primary;
+  }
+  &__body {
+    font-size: 2rem;
+    width: 80%;
+    text-align: center;
+    color: rgb(255,255,255);
+    margin-bottom: 1rem;
   }
   &__text {
     background-color: white;

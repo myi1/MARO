@@ -11,13 +11,13 @@ export default class MarsGallery extends Component {
     currentImages: [],
     galleryImagesArray: [],
     currentRover: {
-      name: "curiosity",
+      name: "",
       landing_date: "",
       max_date: "",
-      selected_date: "2021-06-14",
+      selected_date: "",
       camerasData: [],
-      cameras: ["FHAZ", "MAST", "NAVCAM", "RHAZ"],
-      selectedCamera: "FHAZ",
+      cameras: [],
+      selectedCamera: "",
     },
     shouldUpdate: false,
     showGallery: false,
@@ -33,6 +33,7 @@ export default class MarsGallery extends Component {
     const { shouldUpdate } = this.state;
     if (shouldUpdate) {
       this.getCurrentImages();
+      console.log(this.state.currentImages)
     }
   }
 
@@ -58,7 +59,6 @@ export default class MarsGallery extends Component {
           shouldUpdate: false,
           galleryImagesArray: currentImages,
         });
-        console.log(currentImages);
       })
       .catch((err) => {
         console.log("API Request Failed: ", err);
@@ -70,7 +70,6 @@ export default class MarsGallery extends Component {
     axios
       .get(`${API_URL}manifests/${rover}?api_key=${API_KEY}`)
       .then((response) => {
-        console.log(response.data);
         this.setState((prevState) => ({
           shouldUpdate: true,
           currentRover: {
@@ -78,7 +77,7 @@ export default class MarsGallery extends Component {
             landing_date: response.data.photo_manifest.landing_date,
             max_date: response.data.photo_manifest.max_date,
             camerasData: response.data.photo_manifest.photos,
-            selected_date: response.data.photo_manifest.max_date,
+            // selected_date: response.data.photo_manifest.max_date,
           },
         }));
       });
@@ -151,7 +150,6 @@ export default class MarsGallery extends Component {
 
   handleLikeClick(e) {
     const url = e.target.previousElementSibling.currentSrc;
-    console.log(e.target.previousElementSibling.currentSrc);
     axios
       .post(`${MY_API_URL}images/`, {
         original: url,
@@ -161,11 +159,14 @@ export default class MarsGallery extends Component {
         this.setState({
           ...this.state,
           addtoFavorites: true,
+
         });
         setTimeout(
-          () => this.setState({ ...this.state, addtoFavorites: false }),
+          () => this.setState({ ...this.state, addtoFavorites: false}),
           750
         );
+      }).catch((err) => {
+        console.log(err);
       });
   }
 
@@ -173,39 +174,43 @@ export default class MarsGallery extends Component {
     let galleryView;
 
     const { currentImages, currentRover, showGallery } = this.state;
-    const { landing_date, max_date, cameras, selectedCamera, addtoFavorites } =
+    const { name, landing_date, max_date, selected_date, cameras, selectedCamera } =
       currentRover;
-    // console.log(confirmFavorites);
 
-    let confirmFavorites = <p className='gallery__confirmation'>Added!</p>;
+    // if (!currentImages) {
+    //   return (
+    //     <section className='gallery'>
+    //       <p>Loading....</p>
+    //     </section>
+    //   );
+    // }
+    // if (!cameras) {
+    //   return (
+    //     <div className='gallery'>
+    //       <p>
+    //         There are no images for the selected paramters. Please change your
+    //         selections.
+    //       </p>
+    //     </div>
+    //   );
+    // }
 
-    if (!currentImages) {
-      return (
-        <section className='gallery'>
-          <p>Loading....</p>
-        </section>
-      );
-    }
-    if (!cameras) {
-      return (
-        <div className='gallery'>
-          <p>
-            There are no images for the selected paramters. Please change your
-            selections.
-          </p>
-        </div>
-      );
-    }
-    if (showGallery) {
-      galleryView = (
-        <div className='gallery'>
-          <ImageGallery
-            items={this.state.galleryImagesArray}
-            showBullets='true'
-          />
-        </div>
-      );
-    } else {
+    if(!name) {
+      
+        galleryView = (<div className='gallery'>
+        <p className="gallery__missing-info">Start by choosing a Rover from the toolbar above</p>
+        </div>)
+        
+    } else if(!selected_date) {
+      galleryView = (<div className='gallery'>
+      <p className="gallery__missing-info">Next, pick a date</p>
+      </div>)
+    }else if (!selectedCamera) {
+      galleryView = (<div className='gallery'>
+      <p className="gallery__missing-info">Now, choose a camera...</p>
+      </div>)
+    };
+    if(name && selected_date && selectedCamera) {
       galleryView = (
         <div className='gallery'>
           {currentImages.map((image) => {
@@ -241,10 +246,18 @@ export default class MarsGallery extends Component {
               max={max_date}
               cameras={cameras}
               selectedCamera={selectedCamera}
+              currentRover={currentRover}
             />
           }
+                <div className="info">
+        <h2 className="info__title">Rover:</h2>
+        <p className="info__content">{currentRover.name}</p>
+        <h2 className="info__title">Date:</h2>
+        <p className="info__content">{currentRover.selected_date}</p>
+        <h2 className="info__title">Camera:</h2>
+        <p className="info__content">{currentRover.selectedCamera}</p>
+      </div>
         </div>
-        {this.state.addtoFavorites ? confirmFavorites : null}
         {galleryView}
       </section>
     );

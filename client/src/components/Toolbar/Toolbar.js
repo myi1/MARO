@@ -9,8 +9,8 @@ function Toolbar({
   dateClickHandle,
   cameras,
   cameraClickHandle,
-  activeName,
   selectedCamera,
+  currentRover,
 }) {
   return (
     <div className='toolbar'>
@@ -21,7 +21,6 @@ function Toolbar({
           // id='curiosity'
           name='rover'
           value='curiosity'
-          defaultChecked
           className='toolbar__input toolbar__input--1'
           id='rover-option-1'
         />
@@ -32,7 +31,6 @@ function Toolbar({
         <input
           onClick={roverClickHandle}
           type='radio'
-          // id='opportunity'
           id='rover-option-2'
           name='rover'
           value='opportunity'
@@ -64,7 +62,8 @@ function Toolbar({
         name='date'
         min={min}
         max={max}
-        // defaultValue={max}
+        required
+     
         className='toolbar__date'
       />
 
